@@ -2,6 +2,7 @@ import { useAuth } from "@clerk/clerk-react";
 import React, { useState,useEffect } from "react";
 import {axiosInstance} from "../lib/axios.ts";
 import {Loader2Icon as Loader} from "lucide-react"
+import { useAuthStore } from "@/stores/useAuthStore.ts";
 
 const updateApiToken =(token: string | null ) => {
     if (token) axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
@@ -10,6 +11,7 @@ const updateApiToken =(token: string | null ) => {
 
 const AuthProviders = ({children} : {children : React.ReactNode}) => {
     const {getToken,} = useAuth();
+    const {checkAdminStatus} = useAuthStore()
     const [loading,setLoading] = useState(true);
     useEffect(() => {
         const initAuth = async () => {
@@ -17,7 +19,9 @@ const AuthProviders = ({children} : {children : React.ReactNode}) => {
                 const token = await getToken();
                 updateApiToken(token);
                 if(token) {
-                    //
+
+                    
+                    await checkAdminStatus();
                 }
 
                 

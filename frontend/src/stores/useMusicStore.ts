@@ -3,18 +3,32 @@ import { axiosInstance } from "@/lib/axios";
 import { Songs, Albums } from "@/types";
 
 interface MusicStore {
-    songs : Songs[],
-    albums : Albums[],
-    isLoading : boolean,
-    error : string | null,
-    fetchAlbums : () => Promise<void>,
-    fetchAlbumById : (id: string ) => Promise<void>
-    currentAlbum : Albums | null;
+    songs : Songs[];
+    albums : Albums[];
+    error : string | null;
+    isLoading : boolean;
+    currentAlbum : Albums | null
+    madeForYouSongs : Songs[];
+    trendingSongs : Songs[];
+    featuredSongs : Songs[]
+    
+    
+   
+    fetchAlbums : () => Promise<void>;
+    fetchAlbumById : (id: string ) => Promise<void>;
+    fetchFeaturedSongs : () => Promise<void>;
+    fetchTrendingSongs : () => Promise<void>;
+    fetchMadeForYouSongs : () => Promise<void>;
+    
+    
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
     albums : [],
     songs : [],
+    madeForYouSongs: [],
+   trendingSongs: [],
+   featuredSongs: [],
     isLoading: false,
     error : null,
     currentAlbum: null,
@@ -47,6 +61,51 @@ export const useMusicStore = create<MusicStore>((set) => ({
         }
   
 
-}
+},
+   
+   fetchFeaturedSongs: async () => {
+      set({isLoading:true, error: null});
+      try {
+        const response = await axiosInstance.get("/songs/featured");
+        set({featuredSongs: response.data});
+
+      } catch (error:any) {
+        set({error: error.response.data.message})
+      }finally {
+        set({isLoading: false})
+      }
+   },
+   fetchTrendingSongs: async () => {
+    set({isLoading:true, error: null});
+    try {
+      const response = await axiosInstance.get("/songs/trending");
+      set({trendingSongs: response.data});
+
+    } catch (error:any) {
+      set({error: error.response.data.message})
+    }finally {
+      set({isLoading: false})
+    }
+
+
+
+
+
+   },
+   fetchMadeForYouSongs: async () => {
+
+
+    set({isLoading:true, error: null});
+      try {
+        const response = await axiosInstance.get("/songs/made-for-you");
+        set({madeForYouSongs: response.data});
+
+      } catch (error:any) {
+        set({error: error.response.data.message})
+      }finally {
+        set({isLoading: false})
+      }
+   },
+
 
 }))
