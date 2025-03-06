@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom"
 import LeftSideBar from "./components/LeftSideBar";
 import FriendsActivity from "./components/FriendsActivity";
 import AudioPlayer from "./components/AudioPlayer";
+import PlayBackControls from "./components/PlayBackControls";
 
 const MainLayout = () => {
    const isMobile = false;
@@ -34,6 +35,9 @@ const MainLayout = () => {
         <ResizableHandle className="w-2 bg-black rounded-lg transition-colors "/>
 
     </ResizablePanelGroup>
+    <PlayBackControls/>
+
+    
      
 
 
